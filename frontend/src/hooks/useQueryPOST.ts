@@ -5,7 +5,7 @@ import { Service } from '../interface/Service';
 const API_URL = 'http://localhost:8080';
 
 const postData = async (data: Service) => {
-  const response = await axios.post(API_URL + '/api/servico', data);
+  const response = await axios.post(API_URL + '/api/servico/', data);
   return response;
 };
 

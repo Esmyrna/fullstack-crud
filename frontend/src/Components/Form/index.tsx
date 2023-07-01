@@ -2,36 +2,37 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 import { Field, FormContainer, FormInput, Input, Label } from './style';
 import { useForm } from 'react-hook-form'
 import { Service } from '../../interface/Service';
-import {useQuery} from '../../hooks/useQuery'
+import {useQuery} from '../../hooks/useQueryPOST'
  
-interface Props {
-    onSubmit: () => void
-}
+
+ 
+
 const Form: React.FC = () => {
   
   const {register, handleSubmit} = useForm();
-  const [output, setOutput] = useState('');
-
- const createRegistration = (data: any) => {
-   const service: Service = {
-        clientName: data.clientName,
-        startDate: data.startDate,
-        finalDate: data.finalDate,
-        serviceDescription: data.serviceDescription,
-        serviceValue: 0, // Defina o valor correto se necessário
-        paidValue: 0, // Defina o valor correto se necessário
-        paymentData: 0, // Defina o valor correto se necessário
-        status: ''
-        
-   }
-        mutate(service)
-        console.log(service)
-   
- }
+  const [output, setOutput] = useState<Service | null>(null);
+ 
+  const createRegistration = () => {
+    const service: Service = {
+      clientName: '', // Adicione um valor inicial aqui
+      startDate: new Date(),
+      finalDate: new Date(),
+      serviceDescription: '',
+      serviceValue: 0,
+      paidValue: 0,
+      paymentData: 0,
+      status: '',
+    };
+  
+    mutate(service);
+    console.log(service);
+    setOutput(service);
+  };
     const {mutate,  isSuccess } = useQuery();
-
+   // const clientName = watch('clientName')
+  
   return (
-    <FormInput  onSubmit={handleSubmit(createRegistration)}>
+    <FormInput onSubmit={handleSubmit(createRegistration)}>
       <FormContainer>
         <Field>
           <Label>Nome do cliente</Label>
@@ -58,6 +59,12 @@ const Form: React.FC = () => {
           {...register('serviceDescription')} />
         </Field>
         <Field>
+          <Label>Valor do serviço</Label>
+          <Input 
+          type="text"
+          {...register('serviceValue')} />
+        </Field>
+        <Field>
           <Label>Valor pago</Label>
           <Input 
            type="number" 
@@ -71,7 +78,7 @@ const Form: React.FC = () => {
         </Field>
         <Input type="submit" value="Cadastrar" />
       </FormContainer>
-      {output}
+    {output?.clientName}
     </FormInput>
 
   );
