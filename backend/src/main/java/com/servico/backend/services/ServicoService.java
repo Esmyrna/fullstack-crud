@@ -2,6 +2,7 @@ package com.servico.backend.services;
 
 import com.servico.backend.models.Servico;
 import com.servico.backend.repositories.ServicoRepository;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +15,6 @@ import java.util.Optional;
 public class ServicoService {
     @Autowired
     private ServicoRepository servicoRepository;
-
     public List<Servico> findAll() {
         return servicoRepository.findAll();
     }
@@ -24,13 +24,14 @@ public class ServicoService {
     public List<Servico> findCanceledServices() {
         return servicoRepository.canceledServices();
     }
-    public Servico insert( Servico service) {
+    public Servico insert(Servico service) {
+
         if(service.getPaidValue() == null || service.getPaidValue() == 0 || service.getPaymentData() == null){
             service.setStatus("Pendente");
         } else{
             service.setStatus("Realizado");
         }
-        Servico serviceBank = servicoRepository.saveAndFlush(service);
+        Servico serviceBank = servicoRepository.save(service);
         return serviceBank;
     }
     public Servico toAlter( Long id,  Servico service){

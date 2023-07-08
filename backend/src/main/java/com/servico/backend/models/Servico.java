@@ -20,6 +20,7 @@ public class Servico {
     private String serviceDescription;
     private Double serviceValue;
     private Double paidValue;
+    @Temporal(TemporalType.DATE)
     private Date paymentData;
     private String status; // "pendente", "realizado", "cancelado"
 
