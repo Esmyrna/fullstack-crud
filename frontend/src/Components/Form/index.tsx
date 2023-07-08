@@ -1,84 +1,115 @@
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Field, FormContainer, FormInput, Input, Label } from './style';
-import { useForm } from 'react-hook-form'
+import axios from 'axios';
+import { useQueryGET } from '../../hooks/useQueryGET';
 import { Service } from '../../interface/Service';
-import {useQuery} from '../../hooks/useQueryPOST'
- 
+import { AxiosResponse } from "axios";
 
- 
 
 const Form: React.FC = () => {
-  
-  const {register, handleSubmit} = useForm();
-  const [output, setOutput] = useState<Service | null>(null);
- 
-  const createRegistration = () => {
-    const service: Service = {
-      clientName: '', // Adicione um valor inicial aqui
-      startDate: new Date(),
-      finalDate: new Date(),
+  const { serviceData } = useQueryGET();
+  const [service, setService] = useState (
+    {
+      clientName: '',
+      startDate: '',
+      finalDate: '',
       serviceDescription: '',
       serviceValue: 0,
-      paidValue: 0,
-      paymentData: 0,
-      status: '',
-    };
+      paidValue: '',
+      paymentData: '',
+    });
+
+  const [services, setServices] = useState<Service[]>();
+  const [update, setUpdate] = useState<AxiosResponse<any> | undefined>();
   
-    mutate(service);
-    console.log(service);
-    setOutput(service);
+  useEffect(() => {
+     if(serviceData){
+      setServices(serviceData)
+      console.log(services)
+     }
+  }, [update]);
+
+  const onSubmit = (e: React.FormEvent) => {
+    axios
+      .post("http://localhost:8080/api/servico/", service)
+      .then((response: AxiosResponse<any>) => {
+        setUpdate(response);
+      });
+    e.preventDefault(); 
   };
-    const {mutate,  isSuccess } = useQuery();
-   // const clientName = watch('clientName')
+
+  const handleChange = (e: any) => {
+    setService({...service, [e.target.name]: e.target.value})
+  }
   
   return (
-    <FormInput onSubmit={handleSubmit(createRegistration)}>
+    <FormInput onSubmit={onSubmit}>
       <FormContainer>
         <Field>
           <Label>Nome do cliente</Label>
-          <Input 
-          type="text" 
-          {...register('clientName')} />
+          <Input
+            type="text"
+            value={service.clientName}
+            name="clientName"
+            onChange={handleChange}
+          />
         </Field>
         <Field>
           <Label>Data de início</Label>
           <Input
-          type="date"
-          {...register('startDate')} />
+            type="date"
+            name="startDate"
+            value={service.startDate}
+            onChange={handleChange}
+          />
         </Field>
         <Field>
           <Label>Data de Término</Label>
-          <Input 
-          type="date" 
-          {...register('finalDate')} />
+          <Input
+            type="date"
+            name="finalDate"
+            value={service.finalDate}
+            onChange={handleChange}
+          />
         </Field>
         <Field>
           <Label>Descrição do serviço</Label>
-          <Input 
-          type="text"
-          {...register('serviceDescription')} />
+          <Input
+            type="text"
+            name="serviceDescription" 
+            value={service.serviceDescription}
+            onChange={handleChange}
+            />
         </Field>
         <Field>
           <Label>Valor do serviço</Label>
-          <Input 
-          type="text"
-          {...register('serviceValue')} />
+          <Input
+            type="number"
+            name="serviceValue"
+            value={service.serviceValue}
+            onChange={handleChange}
+          />
         </Field>
         <Field>
           <Label>Valor pago</Label>
-          <Input 
-           type="number" 
-           {...register('paidValue')} />
+          <Input
+            type="number"
+            name="paidValue"
+            value={service.paidValue}
+            onChange={handleChange}
+          />
         </Field>
         <Field>
           <Label>Data de pagamento</Label>
-          <Input 
-           type="date" 
-           {...register('payDay')}  />
+          <Input
+            type="date"
+            name="paymentData"
+            value={service.paymentData}
+            onChange={handleChange}
+          />
         </Field>
         <Input type="submit" value="Cadastrar" />
       </FormContainer>
-    {output?.clientName}
     </FormInput>
 
   );
