@@ -1,15 +1,17 @@
-import Table, { TableProps } from 'react-bootstrap/Table';
-import { useQueryGET } from '../../hooks/useQueryGET';
-import { Form } from 'react-bootstrap';
-import { Service } from '../../interface/Service';
+import { Table } from "react-bootstrap";
+import { useQueryGET } from "../../hooks/useQueryGET";
+import { Service } from "../../interface/Service";
 
-interface TablesProps  {
-  service: Service;
+interface TablesProps {
   setService: React.Dispatch<React.SetStateAction<Service>>;
-};
+}
 
-const Tables: React.FC<TablesProps> = ({service, setService}) => {
+const Tables: React.FC<TablesProps> = ({ setService }) => {
   const { serviceData } = useQueryGET();
+
+  const handleChange = (newValue: Service) => {
+    setService(newValue);
+  };
 
   return (
     <div>
@@ -27,19 +29,24 @@ const Tables: React.FC<TablesProps> = ({service, setService}) => {
         <tbody>
           {serviceData?.map((item, index) => (
             <tr key={index}>
-              <td>1</td>
+              <td>{index + 1}</td>
               <td>{item.clientName}</td>
               <td>{item.serviceDescription}</td>
               <td>{item.serviceValue}</td>
               <td>
-              <button onClick={() => setService(item)} className="btn btn-primary">Alterar</button>&nbsp; &nbsp;
-              <button className="btn btn-danger">Excluir</button> &nbsp; &nbsp;
-              <button className="btn btn-warning">Atualizar</button>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => handleChange(item)}
+                >
+                  Alterar
+                </button>
+                &nbsp; &nbsp;
+                <button className="btn btn-danger">Excluir</button> &nbsp; &nbsp;
+                <button className="btn btn-warning">Atualizar</button>
               </td>
             </tr>
           ))}
         </tbody>
-  
       </Table>
     </div>
   );

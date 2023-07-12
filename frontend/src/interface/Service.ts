@@ -1,11 +1,11 @@
 export interface Service {
     id?: number,
     clientName: string,
-    startDate: Date,
-    finalDate: Date,
+    startDate: string,
+    finalDate: string,
     serviceDescription: string,
     serviceValue: number,
     paidValue: number,
-    paymentData: Date,
+    paymentData: string,
   
 }

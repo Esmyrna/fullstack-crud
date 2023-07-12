@@ -4,29 +4,29 @@ import axios from 'axios';
 import { useQueryGET } from '../../hooks/useQueryGET';
 import { Service } from '../../interface/Service';
 import { AxiosResponse } from "axios";
-
+import Tables from '../Tables/'
+import { Table } from 'react-bootstrap';
 
 const Form: React.FC = () => {
   const { serviceData } = useQueryGET();
-  const [service, setService] = useState (
-    {
-      clientName: '',
-      startDate: '',
-      finalDate: '',
-      serviceDescription: '',
-      serviceValue: 0,
-      paidValue: '',
-      paymentData: '',
-    });
+  const [service, setService] = useState<Service>({
+    clientName: '',
+    startDate: '',
+    finalDate:'',
+    serviceDescription: '',
+    serviceValue: 0,
+    paidValue: 0,
+    paymentData:'',
+  });
 
   const [services, setServices] = useState<Service[]>();
   const [update, setUpdate] = useState<AxiosResponse<any> | undefined>();
-  
+
   useEffect(() => {
-     if(serviceData){
-      setServices(serviceData)
-      console.log(services)
-     }
+    if (serviceData) {
+      setServices(serviceData);
+      console.log("dados", services);
+    }
   }, [update]);
 
   const onSubmit = (e: React.FormEvent) => {
@@ -35,13 +35,13 @@ const Form: React.FC = () => {
       .then((response: AxiosResponse<any>) => {
         setUpdate(response);
       });
-    e.preventDefault(); 
+    e.preventDefault();
   };
-
   const handleChange = (e: any) => {
     setService({...service, [e.target.name]: e.target.value})
   }
   
+
   return (
     <FormInput onSubmit={onSubmit}>
       <FormContainer>
@@ -76,10 +76,10 @@ const Form: React.FC = () => {
           <Label>Descrição do serviço</Label>
           <Input
             type="text"
-            name="serviceDescription" 
+            name="serviceDescription"
             value={service.serviceDescription}
             onChange={handleChange}
-            />
+          />
         </Field>
         <Field>
           <Label>Valor do serviço</Label>
@@ -110,8 +110,8 @@ const Form: React.FC = () => {
         </Field>
         <Input type="submit" value="Cadastrar" />
       </FormContainer>
+      <Tables setService={setService} />
     </FormInput>
-
   );
 };
 
