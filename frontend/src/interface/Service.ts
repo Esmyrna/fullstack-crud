@@ -7,5 +7,6 @@ export interface Service {
     serviceValue: number,
     paidValue: number,
     paymentData: string,
+    status: string
   
 }

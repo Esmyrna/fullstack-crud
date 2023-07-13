@@ -7,7 +7,7 @@ test('renders learn react link', () => {
   const mockService = {} as Service; // Valor fictício para a propriedade service
   const mockSetService = jest.fn(); // Função fictícia para a propriedade setService
 
-  render(<App service={mockService} setService={mockSetService} />);
+  render(<App  />);
 
   const linkElement = screen.getByText(/learn react/i);
   expect(linkElement).toBeInTheDocument();
