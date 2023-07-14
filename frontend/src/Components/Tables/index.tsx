@@ -21,13 +21,46 @@ const Tables: React.FC<TablesProps> = ({ setService, setUpdate, services }) => {
       .then((result) => {
         setUpdate(result);
       })
-      .catch((error) => {
-        console.error('Erro ao excluir o serviço:', error);
-      });
   };
+
+  const userCancel = (id: number | undefined ) => {
+    axios
+    .post(`http://localhost:8080/api/servico/${id}`)
+    .then((result) => {
+      setUpdate(result)
+    })
+  };
+  
+  const findAll = () => {
+    axios
+      .get(`http://localhost:8080/api/servico/`)
+      .then((result) => {
+        setUpdate(result)
+      })
+  };
+
+  const fetchPendingPayment = () => {
+    axios
+    .get(`http://localhost:8080/api/servico/pagamentosPendente`)
+    .then((result) => {
+      setUpdate(result)
+    })
+  };
+
+  const fetchCancel = () => {
+    axios
+    .get(`http://localhost:8080/api/servico/cancelados`)
+    .then((result) => {
+      setUpdate(result)
+    })
+  };
+
 
   return (
     <div>
+      <button className="btn btn-danger">fdfd</button>
+      <button className="btn btn-danger">fdfd</button>
+      <button className="btn btn-danger">fdfd</button>
       <Table responsive="sm">
         <thead>
           <tr>
@@ -49,25 +82,24 @@ const Tables: React.FC<TablesProps> = ({ setService, setUpdate, services }) => {
               <td>{item.serviceValue}</td>
               <td>{item.status}</td>
               <td>
-                {item.status !== 'cancelado' && (
+                {item.status !== 'Cancelado' && (
                   <button
                     className="btn btn-primary"
-                    onClick={() => handleChange(item)}
-                  >
+                    onClick={() => handleChange(item)}>
                     Alterar
                   </button>
                 )}
                 &nbsp; &nbsp;
-                {item.status !== 'cancelado' && (
+                {item.status !== 'Cancelado' && (
                   <button
                     className="btn btn-danger"
-                    onClick={() => userDelete(item.id)}
-                  >
-                    Excluir
+                    onClick={() => userDelete(item.id)}>Excluir
                   </button>
                 )}
                 &nbsp; &nbsp;
-                <button className="btn btn-warning">Atualizar</button>
+                <button className="btn btn-warning"
+                onClick={() => userCancel(item.id)}>Cancelar
+                </button>
               </td>
             </tr>
           ))}
